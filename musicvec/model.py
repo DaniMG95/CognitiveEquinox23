@@ -40,7 +40,7 @@ class SongRepository:
         except:
             collection_info = None
 
-        if collection_info is None:
+        if collection_info is None or force:
             self.client.recreate_collection(
                 collection_name=self.COLLECTION,
                 vectors_config=models.VectorParams(size=512, distance=models.Distance.COSINE)

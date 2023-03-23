@@ -17,15 +17,16 @@ class DataToVector:
         if cls.__model_embed is None:
             model_url = MODEL_URL
             cls.__model_embed = hub.load(model_url)
-        cls.__stopwords = set(nltk_stopwords.words('es-es'))
+        cls.__stopwords = set(nltk_stopwords.words('english'))
 
         cls.__device = "/gpu:0" if tf.test.is_gpu_available() else 'CPU'
 
         return super().__new__(cls)
 
     def prepare_input(self, input_string: str) -> np.ndarray:
-        normalized_input_string = ' '.join(word for word in input_string.split()).strip(
-            ' ')
+        normalized_input_string = ' '.join(
+            word for word in input_string.split() if word not in self.__stopwords
+        ).strip(' ')
         # Get the embeddings of input
         with tf.device(self.__device):
             emb_question = self.__model_embed(normalized_input_string).numpy()
