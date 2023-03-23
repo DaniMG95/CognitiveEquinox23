@@ -31,3 +31,9 @@ tensorflow_hub
 nltk
 tensorflow_text
 qdrant_client
+
+html2text
+jinja2
+python-multipart
+
+

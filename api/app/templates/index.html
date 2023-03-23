@@ -4,6 +4,9 @@
     <input type="text" id="facultyId" name="phrase" value=""/>
     <button type="submit" >Submit</button>
 </form>
-    <h1>{% if song %} Tu cancion es : {{ song }} {% endif %}</h1>
+    <h1>{% if track_name %} Tu cancion es : {{ track_name }} {% if artist_name %} de {{ artist_name }} {% endif %}{% endif %}</h1>
+{% if link %}
+    <a href="{{ link }}">Youtube</a>
+{% endif %}
 </body>
 </html>
