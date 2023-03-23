@@ -54,6 +54,7 @@ def add_data():
                     repo.add_songs(songs)
                     songs = []
             counter = counter + 1
+        repo.add_songs(songs)
 
     print(f'songs added {counter}')
 

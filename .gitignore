@@ -133,4 +133,6 @@ dmypy.json
 
 .idea
 
-resources/data.csv
+api/resources/
+
+docker-compose.override.yml

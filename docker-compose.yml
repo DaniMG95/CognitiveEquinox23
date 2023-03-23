@@ -23,8 +23,6 @@ services:
       PORT_QDRANT: 6333
       COLLECTION_NAME: songs
       CUDA_VISIBLE_DEVICES: ""
-    volumes:
-      - /Users/cx02515/Documents/code/CognitiveEquinox23/resources/data.csv:/code/resources/data.csv
     depends_on:
       qdrant:
         condition: service_started
