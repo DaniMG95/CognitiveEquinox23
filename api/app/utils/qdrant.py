@@ -4,9 +4,7 @@ from qdrant_client import QdrantClient
 class Qdrant:
 
     def __init__(self, server: str, port: int, collection_name: str):
-        self.__server = server
-        self.__port = port
-        self.__client = QdrantClient("localhost", port=6333)
+        self.__client = QdrantClient(host=server, port=port)
         self.__collection_name = collection_name
 
     def search_song(self, phrase):

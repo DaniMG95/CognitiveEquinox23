@@ -12,6 +12,27 @@ services:
     volumes:
       - qdrant:/qdrant/storage
       - ./qdrant/config:/qdrant/config/
+    networks:
+      - backend
+  api:
+    build: ./api
+    ports:
+      - "80:80"
+    environment:
+      SERVER_QDRANT: qdrant
+      PORT_QDRANT: 6333
+      COLLECTION_NAME: test_collection
+    depends_on:
+      qdrant:
+        condition: service_started
+    networks:
+      - backend
+
 
 volumes:
   qdrant:
+
+networks:
+  backend:
+    name: custom-backend
+    driver: bridge

@@ -3,6 +3,6 @@ import os
 
 load_dotenv()
 
-SERVER = os.getenv("SERVER")
-PORT = int(os.getenv("PORT"))
+SERVER_QDRANT = os.getenv("SERVER_QDRANT")
+PORT_QDRANT = int(os.getenv("PORT_QDRANT"))
 COLLECTION_NAME = os.getenv("COLLECTION_NAME")

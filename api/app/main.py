@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from api.routers import song
+from .routers import song
 
 app = FastAPI()
 
