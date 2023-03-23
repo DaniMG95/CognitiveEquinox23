@@ -8,7 +8,6 @@ router = APIRouter(
     responses={404: {"description": "Not found"}},
 )
 
-
 qdrant = Qdrant(server=SERVER_QDRANT, port=PORT_QDRANT, collection_name=COLLECTION_NAME)
 
 
