@@ -19,4 +19,4 @@ class Qdrant:
 
     @staticmethod
     def __vectorize(phrase: str) -> list[float]:
-        return [0.2, 0.1, 0.9, 0.7]
+        return [0.2]*512

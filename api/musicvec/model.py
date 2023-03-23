@@ -1,11 +1,10 @@
 from dataclasses import dataclass
-from typing import Optional, List, Any
+from typing import Optional, List
 
-import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 
-from musicvec.utils.vectorize import DataToVector
+from api.musicvec.utils.vectorize import DataToVector
 
 
 @dataclass

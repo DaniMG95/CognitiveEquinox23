@@ -1,4 +1,4 @@
-from musicvec.model import Song, SongRepository
+from api.musicvec.model import Song, SongRepository
 from qdrant_client import QdrantClient
 
 song = Song(

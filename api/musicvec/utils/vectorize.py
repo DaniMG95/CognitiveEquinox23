@@ -19,7 +19,7 @@ class DataToVector:
             cls.__model_embed = hub.load(model_url)
         cls.__stopwords = set(nltk_stopwords.words('english'))
 
-        cls.__device = "/gpu:0" if tf.test.is_gpu_available() else 'CPU'
+        cls.__device = "/gpu:0" if tf.config.list_physical_devices('GPU') else 'CPU'
 
         return super().__new__(cls)
 

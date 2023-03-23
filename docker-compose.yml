@@ -21,7 +21,7 @@ services:
     environment:
       SERVER_QDRANT: qdrant
       PORT_QDRANT: 6333
-      COLLECTION_NAME: test_collection
+      COLLECTION_NAME: songs
     depends_on:
       qdrant:
         condition: service_started
