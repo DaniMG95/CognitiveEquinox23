@@ -1,11 +1,10 @@
 from dataclasses import dataclass
-from typing import Optional, List, Any
+from typing import Optional, List
 
-import numpy as np
 from qdrant_client import QdrantClient
 from qdrant_client.http import models
 
-from musicvec.utils.vectorize import DataToVector
+from app.musicvec.utils.vectorize import DataToVector
 
 
 @dataclass
@@ -24,7 +23,7 @@ class Song:
     def vector(self):
         if self._vector is None:
             vectorizer = DataToVector()
-            self._vector = list(float(f) for f in vectorizer.prepare_input(self.lyrics)[0])
+            self._vector = vectorizer.prepare_input(self.lyrics)
         return self._vector
 
 

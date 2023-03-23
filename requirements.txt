@@ -3,3 +3,4 @@ tensorflow_hub
 nltk
 tensorflow_text
 protobuf==3.20.*
+qdrant_client
