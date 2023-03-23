@@ -30,9 +30,8 @@ def parse_data():
                     csv_writer.writerow([artist_name, track_name, release_date, genre, lyrics, song_len, topic, age,
                                          lyrics_vector.tolist()])
 
-                if counter == 10:
-                    break
                 counter = counter + 1
+    print(f'lyrics added {counter}')
 
 
 if __name__ == '__main__':
