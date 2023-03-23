@@ -21,12 +21,17 @@ services:
     environment:
       SERVER_QDRANT: qdrant
       PORT_QDRANT: 6333
-      COLLECTION_NAME: test_collection
+      COLLECTION_NAME: songs
+      CUDA_VISIBLE_DEVICES: ""
+    volumes:
+      - /Users/cx02515/Documents/code/CognitiveEquinox23/resources/data.csv:/code/resources/data.csv
     depends_on:
       qdrant:
         condition: service_started
     networks:
       - backend
+    stdin_open: true
+    tty: true
 
 
 volumes:
