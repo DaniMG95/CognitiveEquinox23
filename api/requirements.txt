@@ -31,3 +31,6 @@ tensorflow_hub
 nltk
 tensorflow_text
 qdrant_client
+unlimited-youtube-search
+flask
+flask_cors
