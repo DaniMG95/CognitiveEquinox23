@@ -32,6 +32,7 @@ class SongRepository:
 
     def __init__(self, client: QdrantClient):
         self.client = client
+        self.vectorizer = DataToVector()
 
     def create_collection(self, force=False):
         try:
@@ -72,3 +73,80 @@ class SongRepository:
             )
         )
 
+    def search_songs(self, offset=0, limit=10, score_threshold=None, vector=None, vector_str=None, **kwargs):
+        filters = {
+            "must": [],
+            "should": [],
+            "must_not": []
+        }
+
+        for key, value in kwargs.items():
+            key_tokens = key.split("__")
+            len_tokens = len(key_tokens)
+            filter_key = key_tokens[0]
+            if len_tokens == 1:
+                filter = "must"
+                op = "match"
+            elif len_tokens == 2:
+                if key_tokens[1] in ("must", "should", "must_not"):
+                    filter = key_tokens[1]
+                    op = "match"
+                else:
+                    filter = "match"
+                    op = key_tokens[1]
+            else:
+                filter = key_tokens[1]
+                op = key_tokens[2]
+
+            if filter_key in ("id", "pk"):
+                op = "has_id"
+
+            if op == "match":
+                match_obj = models.MatchValue(value=value)
+            elif op == "in":
+                match_obj = models.MatchAny(any=list(value))
+            elif op == "like":
+                match_obj = models.MatchText(text=value)
+            elif op in ("gt", "lt", "gte", "lte"):
+                match_obj = models.Range(**{op: value})
+            elif op == "has_id":
+                match_obj = models.HasIdCondition(
+                    has_id=[value] if isinstance(value, int) else value
+                )
+            else:
+                raise ValueError(f"Filter ({ key } = {value}) is now allowed")
+
+            if op == "has_id":
+                filters[filter].append(
+                    match_obj
+                )
+            else:
+                filters[filter].append(
+                    models.FieldCondition(
+                        key=filter_key,
+                        match=match_obj
+                    )
+                )
+
+        filter = models.Filter(
+            **filters
+        )
+
+        if vector_str is not None and vector is None:
+            vector = self.vectorizer.prepare_input(vector_str)
+
+        if vector is None:
+            return self.client.scroll(
+                collection_name=self.COLLECTION,
+                offset=offset,
+                limit=limit,
+                scroll_filter=filter
+            )
+        return self.client.search(
+            collection_name=self.COLLECTION,
+            offset=offset,
+            limit=limit,
+            query_filter=filter,
+            query_vector=vector,
+            score_threshold=score_threshold
+        )

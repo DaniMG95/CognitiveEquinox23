@@ -12,3 +12,6 @@ repo = SongRepository(client=QdrantClient())
 
 repo.create_collection(force=True)
 repo.add_songs([song])
+
+songs = repo.search_songs(pk=1, lyrics__must__like="lkajfdhlkj")
+print(songs)
