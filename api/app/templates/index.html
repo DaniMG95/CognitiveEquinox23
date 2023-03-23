@@ -74,6 +74,19 @@
         {% endif %}
     </section>
     {% endif %}
+{% if time_url_to_text  or time_url_to_text or time_search_youtube %}
+<h3>Times</h3>
+    {% if time_url_to_text %}
+        <p>Url to text: {{time_url_to_text}}ms</p>
+    {% endif %}
+    {% if time_search_db %}
+        <p>Database time: {{time_search_db}}ms</p>
+    {% endif %}
+    {% if time_search_youtube %}
+        <p>Search video Youtube: {{time_search_youtube}}ms</p>
+    {% endif %}
+{% endif %}
+</body>
 </div>
 </body>
 </html>
