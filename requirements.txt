@@ -1,0 +1,5 @@
+numpy
+tensorflow_hub
+nltk
+tensorflow_text
+protobuf==3.20.*
