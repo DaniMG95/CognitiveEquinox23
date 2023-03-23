@@ -13,5 +13,14 @@
 
     <iframe width="560" height="315" src="{{ embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 {% endif %}
+
+{% if url_input %}
+    <iframe id="url_input"
+        title="url_input"
+        width="300"
+        height="200"
+        src="{{url_input}}">
+    </iframe>
+{% endif %}
 </body>
 </html>
