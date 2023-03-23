@@ -4,11 +4,12 @@ import json
 import os
 
 from musicvec.model import Song, SongRepository
+from qdrant_client import QdrantClient
 
 
 def add_data():
-    song_repository = SongRepository()
-    song_repository.create_collection()
+    repo = SongRepository(client=QdrantClient())
+    repo.create_collection(force=True)
 
     vectorize_files = glob.glob('../../resources/vectorize_music*.csv')
     last_vectorize_file = max(vectorize_files, key=os.path.getctime)
@@ -42,7 +43,7 @@ def add_data():
                 )
                 songs.append(song)
                 if len(songs) == 100:
-                    song_repository.add_songs(songs)
+                    repo.add_songs(songs)
                     songs = []
             counter = counter + 1
 
