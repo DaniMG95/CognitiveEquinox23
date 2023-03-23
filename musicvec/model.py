@@ -33,6 +33,7 @@ class SongRepository:
 
     def __init__(self, client: QdrantClient):
         self.client = client
+        self.vectorizer = DataToVector()
 
     def create_collection(self, force=False):
         try:
@@ -73,7 +74,7 @@ class SongRepository:
             )
         )
 
-    def search_songs(self, offset=0, limit=10, score_threshold=None, vector=None, **kwargs):
+    def search_songs(self, offset=0, limit=10, score_threshold=None, vector=None, vector_str=None, **kwargs):
         filters = {
             "must": [],
             "should": [],
@@ -128,11 +129,13 @@ class SongRepository:
                     )
                 )
 
-        print(filters)
-
         filter = models.Filter(
             **filters
         )
+
+        if vector_str is not None and vector is None:
+            vector = self.vectorizer.prepare_input(vector_str)
+
         if vector is None:
             return self.client.scroll(
                 collection_name=self.COLLECTION,
