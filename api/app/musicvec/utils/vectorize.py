@@ -1,7 +1,7 @@
 import numpy as np
 from nltk.corpus import stopwords as nltk_stopwords
 import tensorflow_hub as hub
-import tensorflow_text
+import tensorflow_text  #noqa
 import tensorflow as tf
 
 
@@ -15,12 +15,12 @@ class DataToVector:
 
     def __new__(cls):
         if cls.__model_embed is None:
+            # tf.saved_model.LoadOptions(experimental_io_device='/tmp')
             model_url = MODEL_URL
-            cls.__model_embed = hub.load(model_url)
-        cls.__stopwords = set(nltk_stopwords.words('english'))
-
-        cls.__device = "/gpu:0" if tf.test.is_gpu_available() else 'CPU'
-
+            cls.__device = 'CPU'
+            with tf.device(cls.__device):
+                cls.__model_embed = hub.load(model_url)
+            cls.__stopwords = set(nltk_stopwords.words('english'))
         return super().__new__(cls)
 
     def prepare_input(self, input_string: str) -> np.ndarray:
@@ -29,5 +29,5 @@ class DataToVector:
         ).strip(' ')
         # Get the embeddings of input
         with tf.device(self.__device):
-            emb_question = self.__model_embed(normalized_input_string).numpy()
+            emb_question = self.__model_embed(normalized_input_string).numpy().tolist()[0]
         return emb_question

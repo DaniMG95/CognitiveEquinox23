@@ -12,7 +12,7 @@ class DataToVector:
         if cls.__model_embed is None:
             model_url = 'https://tfhub.dev/google/universal-sentence-encoder-multilingual/3'
             cls.__model_embed = hub.load(model_url)
-        # cls.__stopwords = set(nltk_stopwords.words('es-es'))
+        cls.__stopwords = set(nltk_stopwords.words('english'))
         return super().__new__(cls)
 
     def prepare_input(self, input_string: str) -> np.ndarray:
