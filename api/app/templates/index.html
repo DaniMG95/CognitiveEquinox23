@@ -1,7 +1,9 @@
 <html>
 <body>
 <form method='post'>
-    <input type="text" id="facultyId" name="phrase" value=""/>
+    <input type="text" name="phrase" value="" placeholder="text"/>
+    o
+    <input type="text" name="url" value="" placeholder="url"/>
     <button type="submit" >Submit</button>
 </form>
     <h1>{% if track_name %} Tu cancion es : {{ track_name }} {% if artist_name %} de {{ artist_name }} {% endif %}{% endif %}</h1>

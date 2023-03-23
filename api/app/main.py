@@ -1,5 +1,7 @@
 import urllib
 
+import html2text
+import requests
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
@@ -26,8 +28,16 @@ async def home(rq: Request):
 
 
 @app.post("/", response_class=HTMLResponse)
-async def get_song(rq: Request, phrase: str = Form(...)):
-    data = qdrant.search_song(phrase=phrase)
+async def get_song(rq: Request, phrase: str):
+    import pdb; pdb.set_trace()
+    text = None
+    url = None
+    if url:
+        response_url = requests.get(url)
+        if response_url.status_code == 200:
+            text = html2text.HTML2Text(response_url.text)
+
+    data = qdrant.search_song(phrase=text or phrase)
     values = data[0].payload
     track_name = values.get("track_name")
     artist_name = values.get("artist_name")
