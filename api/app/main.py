@@ -9,6 +9,7 @@ from fastapi.templating import Jinja2Templates
 from .routers import song
 from .utils.qdrant import Qdrant
 from .const import SERVER_QDRANT, PORT_QDRANT, COLLECTION_NAME
+from typing import Optional
 
 
 templates = Jinja2Templates(directory="./app/templates")
@@ -28,15 +29,11 @@ async def home(rq: Request):
 
 
 @app.post("/", response_class=HTMLResponse)
-async def get_song(rq: Request, phrase: str):
-    import pdb; pdb.set_trace()
-    text = None
-    url = None
+async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optional[str] = Form(None)):
     if url:
         response_url = requests.get(url)
         if response_url.status_code == 200:
             text = html2text.HTML2Text(response_url.text)
-
     data = qdrant.search_song(phrase=text or phrase)
     values = data[0].payload
     track_name = values.get("track_name")
