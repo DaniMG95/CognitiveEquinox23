@@ -1,6 +1,6 @@
 <html>
 <body>
-<form method='post'>
+<form action="/" method='post'>
     <input type="text" name="phrase" value="" placeholder="text"/>
     o
     <input type="text" name="url" value="" placeholder="url"/>
@@ -21,6 +21,16 @@
         height="200"
         src="{{url_input}}">
     </iframe>
+{% endif %}
+{% if id_song > 0 %}
+<form action="/{{id_song-1}}" method="get">
+    <button type="submit"><</button>
+</form>
+{% endif %}
+{% if id_song >= 0 and id_song < 5 %}
+<form action="/{{id_song+1}}" method="get">
+    <button type="submit">></button>
+</form>
 {% endif %}
 </body>
 </html>

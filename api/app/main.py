@@ -17,6 +17,9 @@ qdrant = Qdrant(server=SERVER_QDRANT, port=PORT_QDRANT, collection_name=COLLECTI
 
 
 app = FastAPI()
+data_songs = []
+url_song = ""
+id_song = -1
 
 
 for router in [song]:
@@ -25,20 +28,15 @@ for router in [song]:
 
 @app.get("/", response_class=HTMLResponse)
 async def home(rq: Request):
-    return templates.TemplateResponse("index.html", {"request": rq})
+    global id_song
+    id_song = -1
+    return templates.TemplateResponse("index.html", {"request": rq, "id_song": id_song})
 
 
-@app.post("/", response_class=HTMLResponse)
-async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optional[str] = Form(None)):
-    text = None
-    if url:
-        response_url = requests.get(url)
-        if response_url.status_code == 200:
-            text = html2text.html2text(response_url.text)
-
-    data = qdrant.search_song(phrase=text or phrase)
-
-    values = data[0].payload
+@app.get("/{index_song}", response_class=HTMLResponse)
+async def home_id_song(rq: Request, index_song: int):
+    global data_songs
+    values = data_songs[index_song]
     track_name = values.get("track_name")
     artist_name = values.get("artist_name")
     link = ''
@@ -59,6 +57,47 @@ async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optiona
         "track_name": track_name,
         "link": link,
         "embed_link": embed_link,
-        "url_input": url
+        "url_input": url_song,
+        "id_song": index_song
+    })
+
+
+@app.post("/", response_class=HTMLResponse)
+async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optional[str] = Form(None)):
+    global url_song
+    global data_songs
+    global id_song
+    id_song = 0
+    text = None
+    if url:
+        response_url = requests.get(url)
+        if response_url.status_code == 200:
+            text = html2text.html2text(response_url.text)
+    url_song = url
+    data_songs = qdrant.search_song(phrase=text or phrase)
+
+    values = data_songs[id_song].payload
+    track_name = values.get("track_name")
+    artist_name = values.get("artist_name")
+    link = ''
+    embed_link = ''
+    if track_name or artist_name:
+        video_id = ScrappingYoutube.search_song(phrase=f"{track_name} {artist_name}")
+        link = f'https://www.youtube.com/watch?v={video_id}'
+        embed_link = f'https://www.youtube.com/embed/{video_id}'
+
+    return templates.TemplateResponse("index.html", {
+        "request": rq,
+        "age": values.get("age"),
+        "artist_name": artist_name,
+        "genre": values.get("genre"),
+        "lyrics": values.get("lyrics"),
+        "release_year": values.get("release_year"),
+        "topic": values.get("topic"),
+        "track_name": track_name,
+        "link": link,
+        "embed_link": embed_link,
+        "url_input": url,
+        "id_song": id_song
     })
 
