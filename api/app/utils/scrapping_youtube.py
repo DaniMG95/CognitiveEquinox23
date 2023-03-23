@@ -1,6 +1,4 @@
 import uyts
-import flask
-import flask_cors
 
 
 class ScrappingYoutube:
@@ -9,4 +7,4 @@ class ScrappingYoutube:
         query = 'Search query: %s' % '+'.join(phrase.split())
         search = uyts.Search(query)
 
-        return 'https://www.youtube.com/watch?v=%s' % search.results[0].id
+        return search.results[0].id

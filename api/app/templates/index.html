@@ -6,7 +6,10 @@
 </form>
     <h1>{% if track_name %} Tu cancion es : {{ track_name }} {% if artist_name %} de {{ artist_name }} {% endif %}{% endif %}</h1>
 {% if link %}
-    <a href="{{ link }}">Youtube</a>
+    <a target="_blank" href="{{ link }}">Youtube</a>
+
+
+    <iframe width="560" height="315" src="{{ embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 {% endif %}
 </body>
 </html>
