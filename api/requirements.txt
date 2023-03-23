@@ -34,3 +34,6 @@ qdrant_client
 unlimited-youtube-search
 flask
 flask_cors
+html2text
+jinja2
+python-multipart
