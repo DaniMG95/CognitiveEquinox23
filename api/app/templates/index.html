@@ -9,8 +9,6 @@
     <h1>{% if track_name %} Tu cancion es : {{ track_name }} {% if artist_name %} de {{ artist_name }} {% endif %}{% endif %}</h1>
 {% if link %}
     <a target="_blank" href="{{ link }}">Youtube</a>
-
-
     <iframe width="560" height="315" src="{{ embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
 {% endif %}
 
@@ -21,6 +19,18 @@
         height="200"
         src="{{url_input}}">
     </iframe>
+{% endif %}
+{% if time_url_to_text  or time_url_to_text or time_search_youtube %}
+<h3>Times</h3>
+    {% if time_url_to_text %}
+        <p>Url to text: {{time_url_to_text}}ms</p>
+    {% endif %}
+    {% if time_search_db %}
+        <p>Database time: {{time_search_db}}ms</p>
+    {% endif %}
+    {% if time_search_youtube %}
+        <p>Search video Youtube: {{time_search_youtube}}ms</p>
+    {% endif %}
 {% endif %}
 </body>
 </html>
