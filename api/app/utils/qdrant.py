@@ -2,9 +2,14 @@ from qdrant_client import QdrantClient
 
 
 class Qdrant:
+    __client = None
+
+    def __new__(cls, server, port, collection_name, *args, **kwargs):
+        if cls.__client is None:
+            cls.__client = QdrantClient(host=server, port=port)
+        return object.__new__(cls, *args, **kwargs)
 
     def __init__(self, server: str, port: int, collection_name: str):
-        self.__client = QdrantClient(host=server, port=port)
         self.__collection_name = collection_name
 
     def search_song(self, phrase):
