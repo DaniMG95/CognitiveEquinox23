@@ -1,26 +1,106 @@
+<!DOCTYPE html>
 <html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EQUINOX 2023 - Soundtracker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <!-- Bulma Version 0.9.0-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
 <body>
-<form method='post'>
-    <input type="text" name="phrase" value="" placeholder="text"/>
-    o
-    <input type="text" name="url" value="" placeholder="url"/>
-    <button type="submit" >Submit</button>
-</form>
-    <h1>{% if track_name %} Tu cancion es : {{ track_name }} {% if artist_name %} de {{ artist_name }} {% endif %}{% endif %}</h1>
-{% if link %}
-    <a target="_blank" href="{{ link }}">Youtube</a>
-    <iframe width="560" height="315" src="{{ embed_link }}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
-{% endif %}
+<nav class="navbar">
+<header>
+    <h1 class="navbar-brand title">Soundtracker</h1>
+</header>
+</nav>
+<div class="container">
+    <section class="section">
+        <h2 class="title">Introduce el contenido</h2>
+        <form method='post'>
+            <div class="field">
+                <label class="label">Texto</label>
+                <div class="control">
+                    <textarea name="phrase" value="" placeholder="text" class="textarea" rows="5"></textarea>
+                </div>
 
-{% if url_input %}
-    <iframe id="url_input"
-        title="url_input"
-        width="300"
-        height="200"
-        src="{{url_input}}">
-    </iframe>
-{% endif %}
+            </div>
+            <div class="label">o</div>
+            <div class="field">
+                <label class="label">URL</label>
+                <div class="control">
+                    <input type="text" name="url" value="" placeholder="url" class="input" />
+                </div>
+            </div>
+            <div class="field is-grouped">
+              <div class="control">
+                <button class="button is-link">Enviar</button>
+              </div>
+              <div class="control">
+                <button class="button is-link is-light">Cancel</button>
+              </div>
+            </div>
+        </form>
+    </section>
+
+    {% if track_name %}
+    <section class="section columns">
+        <div class="card column is-half has-background-primary">
+            <div class="card-header">
+                <a target="_blank" href="{{ link }}">{{ track_name }} ({{ artist_name }})</a>
+            </div>
+            {% if link %}
+            <div class="card-content  has-background-primary">
+                <div class="block">
+                    <iframe width="100%" height="300px" src="{{ embed_link }}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="block">
+                    <span>Precision: </span>
+                    <progress class="progress" value="{{score * 100}}" max="100">{{score * 100}}%</progress>
+                </div>
+                <!-- div class="block dropdown is-hoverable">
+                    <div class="dropdown-trigger">
+                        <button class="button" aria-haspopup="true" aria-controls="dropdown-menu">
+                          <span>Letra</span>
+                          <span class="icon is-small">
+                            <i class="fas fa-angle-down" aria-hidden="true"></i>
+                          </span>
+                        </button>
+                    </div>
+                    <div class="dropdown-menu is-full" id="dropdown-menu" role="menu">
+                        <div class="dropdown-content box">
+                            {{ lyrics }}
+                        </div>
+                    </div>
+                </div -->
+                <div class="block">
+                    <h3>Letra</h3>
+                    <p>{{ lyrics }}</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% if url_input %}
+            <div class="card column is-half">
+                <div class="card-header">
+                    <a target="_blank" href="{{url_input}}">{{url_input}}</a>
+                </div>
+                <div class="card-content">
+                    <iframe id="url_input"
+                        width="100%" height="500px"
+                        title="url_input"
+                        src="{{url_input}}">
+                    </iframe>
+                </div>
+            </div>
+        {% endif %}
+    </section>
+    {% endif %}
+</div>
 {% if time_url_to_text  or time_url_to_text or time_search_youtube %}
+<footer>
 <h3>Times</h3>
     {% if time_url_to_text %}
         <p>Url to text: {{time_url_to_text}}ms</p>
@@ -32,5 +112,6 @@
         <p>Search video Youtube: {{time_search_youtube}}ms</p>
     {% endif %}
 {% endif %}
+</footer>
 </body>
 </html>
