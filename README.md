@@ -1,6 +1,23 @@
 # CognitiveEquinox23
 
-Soundtrack for news
+Soundtrack para noticias
+
+Soundtrack es un proyecto que se basa en el uso de QDRANT como base de datos vectorial. 
+Para ellos hemos usado el MUSE Model para generar los embedings de una dataset de canciones. 
+Para poblar la base de datos hemos usado un procedimiento de provisioning que realiza el paso a vector de cada una de las canciones y la inserción en la base de datos. 
+Para poder consumir estos datos hemos hecho una pequeña web, que permite buscar una canción relacionada con una noticia. 
+Para ello, hemos creado un cuadro de texto donde puede pegar la noticia o pasar un link. 
+Con esta información, pasamos al MUSE Model para sacar el vector de la noticia y tras ello hacemos la petición en la base de datos para sacar las 5 canciones más similares. 
+Con toda esta información generamos la web. Como puntos extras, hemos añadido una búsqueda a youtube para que la canciones se pueda reproducir directamente. 
+
+![equinox](screenshots/equinox.png)
+![racial_politics_nba](screenshots/racial_politics_nba.png)
+![Telefonica](screenshots/Telefonica.png)
+![trump](screenshots/trump.png)
+
+Arquitectura
+
+![arquitectura](screenshots/arquitectura.png)
 
 ## Development
 
