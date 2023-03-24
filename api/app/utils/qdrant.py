@@ -15,7 +15,7 @@ class Qdrant:
         self.__collection_name = collection_name
         self.__data_to_vector = DataToVector()
 
-    def search_song(self, phrase):
+    def search_song(self, phrase, limit=1):
         vector = self.__data_to_vector.prepare_input(input_string=phrase)
-        song = self.__client.search(collection_name=self.__collection_name, query_vector=vector, limit=1)
+        song = self.__client.search(collection_name=self.__collection_name, query_vector=vector, limit=limit)
         return song
