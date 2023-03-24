@@ -7,6 +7,7 @@ import requests
 from fastapi import FastAPI, Request, Form
 from fastapi.responses import HTMLResponse
 from fastapi.templating import Jinja2Templates
+from starlette.responses import FileResponse
 
 from .routers import song
 from .utils.qdrant import Qdrant
@@ -103,3 +104,8 @@ async def yt_song(rq: Request, phrase: str = None):
         "link": f'https://www.youtube.com/watch?v={video_id}',
         "embed_link": f'https://www.youtube.com/embed/{video_id}'
     }
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return FileResponse("./app/img/favicon.ico")
