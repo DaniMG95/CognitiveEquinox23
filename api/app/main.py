@@ -68,6 +68,7 @@ async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optiona
 
         return templates.TemplateResponse("index.html", {
             "request": rq,
+            "score": data[0].score,
             "age": values.get("age"),
             "artist_name": artist_name,
             "genre": values.get("genre"),
