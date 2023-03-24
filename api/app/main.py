@@ -108,4 +108,4 @@ async def yt_song(rq: Request, phrase: str = None):
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
-    return FileResponse("./app/img/favicon.ico")
+    return FileResponse("./app/img/favicon.png")
