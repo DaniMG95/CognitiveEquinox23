@@ -46,15 +46,22 @@
     </section>
 
     {% if track_name %}
-    <section class="section columns">
+    <section class="section columns" id="results" data-tracks='{{tracks_json}}'>
         <div class="card column is-half has-background-primary">
             <div class="card-header">
-                <a target="_blank" href="{{ link }}">{{ track_name }} ({{ artist_name }})</a>
+                <a id="yt_link" target="_blank" href="{{ link }}">{{ track_name }} ({{ artist_name }})</a>
             </div>
             {% if link %}
             <div class="card-content  has-background-primary">
                 <div class="block">
-                    <iframe width="100%" height="300px" src="{{ embed_link }}?autoplay=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                    <iframe
+                            id="yt_embed"
+                            width="100%" height="300px"
+                            src="{{ embed_link }}?autoplay=1"
+                            title="YouTube video player"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                            allowfullscreen
+                    ></iframe>
                 </div>
                 <div class="block">
                     <span>Precision: </span>
@@ -77,8 +84,14 @@
                 </div -->
                 <div class="block">
                     <h3>Letra</h3>
-                    <p>{{ lyrics }}</p>
+                    <p id="lyrics">{{ lyrics }}</p>
                 </div>
+            </div>
+            <div class="card-footer">
+                <p class="buttons">
+                    <button id="prev" onclick="prev()" class="button" disabled>Anterior</button>
+                    <button id="next" onclick="next()" class="button">Siguiente</button>
+                </p>
             </div>
             {% endif %}
         </div>
@@ -113,5 +126,69 @@
     {% endif %}
 {% endif %}
 </footer>
+
+<script>
+    var track_number = 0;
+    var track_data = JSON.parse(document.getElementById("results").dataset.tracks);
+    document.getElementById("prev").disabled = true;
+
+    function prev(){
+        track_number -= 1;
+        document.getElementById("next").disabled = false;
+        if(track_number <= 0){
+            track_number = 0;
+            document.getElementById("prev").disabled = true;
+        }
+        repaint();
+    }
+
+    function next(){
+        track_number += 1;
+        document.getElementById("prev").disabled = false;
+        if(track_number >= (track_data.length - 1)){
+            track_number = (track_data.length - 1);
+            document.getElementById("next").disabled = true;
+        }
+        repaint();
+    }
+
+    function repaint(){
+        let data = track_data[track_number];
+
+        // score
+        let progress_tags = document.getElementsByTagName("progress");
+        if(progress_tags.length === 1){
+            progress_tags[0].value = data.score * 100;
+        }
+
+        // links
+        const links_req = async () => {
+            let response = await fetch(
+                "/yt_song?phrase=" + encodeURIComponent(
+                    data.payload.track_name + " " + data.payload.artist_name
+                )
+            );
+            return response.json();
+        }
+        links_req().then((links) => {
+            console.log(links);
+            let yt_link = document.getElementById("yt_link");
+            if(yt_link !== null){
+                yt_link.href = links.link;
+                yt_link.innerText = data.payload.track_name + " (" + data.payload.artist_name + ")";
+            }
+            let yt_embed = document.getElementById("yt_embed");
+            if(yt_embed !== null) {
+                yt_embed.src = links.embed_link + "?autoplay=1";
+            }
+        });
+
+        // lyrics
+        let lyrics_tag = document.getElementById("lyrics");
+        if(lyrics_tag !== null){
+            lyrics_tag.innerText = data.payload.lyrics;
+        }
+    }
+</script>
 </body>
 </html>

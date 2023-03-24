@@ -1,3 +1,4 @@
+import json
 import time
 import urllib
 
@@ -51,8 +52,15 @@ async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optiona
             except Exception:
                 pass
         t_init_search_db = time.time()
-        data = qdrant.search_song(phrase=text or phrase or url)
+        data = qdrant.search_song(phrase=text or phrase or url, limit=5)
         t_fin_search_db = time.time()
+
+        tracks = []
+        for track in data:
+            tracks.append({
+                "payload": track.payload,
+                "score": track.score
+            })
 
         values = data[0].payload
         track_name = values.get("track_name")
@@ -79,6 +87,7 @@ async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optiona
             "link": link,
             "embed_link": embed_link,
             "url_input": url if set_url else None,
+            "tracks_json": json.dumps(tracks),
             "time_url_to_text": int((t_fin_url_to_text - t_init_url_to_text) * 1000) if t_init_url_to_text and t_fin_url_to_text else None,
             "time_search_db": int((t_fin_search_db - t_init_search_db) * 1000) if t_init_search_db and t_fin_search_db else None,
             "time_search_youtube": int((t_fin_search_youtube - t_init_search_youtube) * 1000) if t_init_search_youtube and t_fin_search_youtube else None
@@ -86,3 +95,11 @@ async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optiona
     except Exception:
         return templates.TemplateResponse("index.html", {"request": rq})
 
+
+@app.get("/yt_song")
+async def yt_song(rq: Request, phrase: str = None):
+    video_id = ScrappingYoutube.search_song(phrase=phrase)
+    return {
+        "link": f'https://www.youtube.com/watch?v={video_id}',
+        "embed_link": f'https://www.youtube.com/embed/{video_id}'
+    }
