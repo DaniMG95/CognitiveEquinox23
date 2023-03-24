@@ -12,6 +12,8 @@ from .routers import song
 from .utils.qdrant import Qdrant
 from .const import SERVER_QDRANT, PORT_QDRANT, COLLECTION_NAME
 from typing import Optional
+
+from .utils.scrapping_news import ScrappingNews
 from .utils.scrapping_youtube import ScrappingYoutube
 
 templates = Jinja2Templates(directory="./app/templates")
@@ -31,7 +33,10 @@ async def home(rq: Request):
 
 
 @app.post("/", response_class=HTMLResponse)
-async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optional[str] = Form(None)):
+async def get_song(
+        rq: Request, phrase: Optional[str] = Form(None),
+        url: Optional[str] = Form(None), lucky: Optional[str] = Form(None)
+):
     try:
         text = None
         set_url = False
@@ -39,6 +44,9 @@ async def get_song(rq: Request, phrase: Optional[str] = Form(None), url: Optiona
         t_fin_url_to_text = None
         t_init_search_youtube = None
         t_fin_search_youtube = None
+
+        if lucky:
+            url = ScrappingNews.search_news()
 
         if url:
             try:
