@@ -37,3 +37,6 @@ flask_cors
 html2text
 jinja2
 python-multipart
+setuptools==58
+feedparser
+newscatcher
