@@ -64,7 +64,7 @@
                     ></iframe>
                 </div>
                 <div class="block">
-                    <span>Precision: </span>
+                    <span>Similitud: </span>
                     <progress class="progress" value="{{score * 100}}" max="100">{{score * 100}}%</progress>
                 </div>
                 <!-- div class="block dropdown is-hoverable">
@@ -128,26 +128,33 @@
 </footer>
 
 <script>
+    var results_el = document.getElementById("results");
+    var prev_el = document.getElementById("prev");
+    var next_el = document.getElementById("next");
     var track_number = 0;
-    var track_data = JSON.parse(document.getElementById("results").dataset.tracks);
-    document.getElementById("prev").disabled = true;
+    var track_data = [];
+
+    if(results_el !== null){
+        track_data = JSON.parse(results_el.dataset.tracks);
+        prev_el.disabled = true;
+    }
 
     function prev(){
         track_number -= 1;
-        document.getElementById("next").disabled = false;
+        next_el.disabled = false;
         if(track_number <= 0){
             track_number = 0;
-            document.getElementById("prev").disabled = true;
+            prev_el.disabled = true;
         }
         repaint();
     }
 
     function next(){
         track_number += 1;
-        document.getElementById("prev").disabled = false;
+        prev_el.disabled = false;
         if(track_number >= (track_data.length - 1)){
             track_number = (track_data.length - 1);
-            document.getElementById("next").disabled = true;
+            next_el.disabled = true;
         }
         repaint();
     }
